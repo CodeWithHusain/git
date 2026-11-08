@@ -194,7 +194,7 @@ void fill_stat_cache_info(struct index_state *istate, struct cache_entry *ce, st
 {
 	fill_stat_data(&ce->ce_stat_data, st);
 
-	if (assume_unchanged)
+	if (repo_assume_unchanged(istate->repo))
 		ce->ce_flags |= CE_VALID;
 
 	if (S_ISREG(st->st_mode)) {
@@ -1415,7 +1415,7 @@ static struct cache_entry *refresh_cache_ent(struct index_state *istate,
 		 * is not marked VALID, this is the place to mark it
 		 * valid again, under "assume unchanged" mode.
 		 */
-		if (ignore_valid && assume_unchanged &&
+		if (ignore_valid && repo_assume_unchanged(istate->repo) &&
 		    !(ce->ce_flags & CE_VALID))
 			; /* mark this one VALID again */
 		else {
@@ -1450,7 +1450,7 @@ static struct cache_entry *refresh_cache_ent(struct index_state *istate,
 	 * (i.e. things to be edited) will reacquire CE_VALID bit
 	 * automatically, which is not really what we want.
 	 */
-	if (!ignore_valid && assume_unchanged &&
+	if (!ignore_valid && repo_assume_unchanged(istate->repo) &&
 	    !(ce->ce_flags & CE_VALID))
 		updated->ce_flags &= ~CE_VALID;
 

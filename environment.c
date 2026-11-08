@@ -42,7 +42,6 @@ static int pack_compression_seen;
 static int zlib_compression_seen;
 
 int minimum_abbrev = 4, default_abbrev = -1;
-int assume_unchanged;
 char *git_commit_encoding;
 char *git_log_output_encoding;
 int fsync_object_files = -1;
@@ -150,6 +149,13 @@ int repo_has_symlinks(struct repository *repo)
 	return repo->initialized
 		? repo_config_values(repo)->has_symlinks
 		: platform_has_symlinks();
+}
+
+int repo_assume_unchanged(struct repository *repo)
+{
+	return repo->initialized
+		? repo_config_values(repo)->assume_unchanged
+		: 0;
 }
 
 const char *repo_excludes_file(struct repository *repo)
@@ -371,7 +377,7 @@ int git_default_core_config(const char *var, const char *value,
 	}
 
 	if (!strcmp(var, "core.ignorestat")) {
-		assume_unchanged = git_config_bool(var, value);
+		cfg->assume_unchanged = git_config_bool(var, value);
 		return 0;
 	}
 
@@ -775,6 +781,7 @@ void repo_config_values_init(struct repo_config_values *cfg)
 	cfg->protect_ntfs = PROTECT_NTFS_DEFAULT;
 	cfg->ignore_case = 0;
 	cfg->trust_executable_bit = 1;
+	cfg->assume_unchanged = 0;
 	cfg->has_symlinks = platform_has_symlinks();
 	cfg->use_nanosec = 0;
 

@@ -147,6 +147,7 @@ struct repo_config_values {
 	int protect_ntfs;
 	int ignore_case;
 	int trust_executable_bit;
+	int assume_unchanged;
 	int has_symlinks;
 	int use_nanosec;
 
@@ -200,6 +201,7 @@ int repo_protect_ntfs(struct repository *repo);
 int repo_ignore_case(struct repository *repo);
 
 int repo_trust_executable_bit(struct repository *repo);
+int repo_assume_unchanged(struct repository *repo);
 
 int repo_has_symlinks(struct repository *repo);
 
@@ -242,7 +244,6 @@ int have_git_dir(void);
 
 /* Environment bits from configuration mechanism */
 extern int minimum_abbrev, default_abbrev;
-extern int assume_unchanged;
 extern unsigned long pack_size_limit_cfg;
 
 extern int grafts_keep_true_parents;
